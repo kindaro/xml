@@ -29,6 +29,7 @@ module Text.XML.Cursor.Generic
 
 import Data.Maybe (maybeToList)
 import Data.List (foldl')
+import Control.Applicative ((<$>))
 import Control.Monad ((>=>))
 
 type DiffCursor node = [RecursiveCursor node] -> [RecursiveCursor node]
