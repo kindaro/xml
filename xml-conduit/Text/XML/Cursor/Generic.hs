@@ -88,18 +88,18 @@ toCursor' :: (node -> [node])
           -> DiffCursor node
           -> node
           -> RecursiveCursor node
-toCursor' cs par pre fol n =
+toCursor' getChildren parent predecessors followers node =
     me
   where
-    me = RecursiveCursor par pre fol chi n
-    chi' = cs n
-    chi = go id chi' []
+    me = RecursiveCursor parent predecessors followers children node
+    children' = getChildren node
+    children = go id children' []
     go _ [] = id
-    go pre' (n':ns') =
-        (:) me' . fol'
+    go predecessors' (node:nodes) =
+        (:) me' . followers'
       where
-        me' = toCursor' cs (Just me) pre' fol' n'
-        fol' = go (pre' . (:) me') ns'
+        me' = toCursor' getChildren (Just me) predecessors' followers' node
+        followers' = go (predecessors' . (:) me') nodes
 
 -- | The parent axis. As described in XPath:
 -- /the parent axis contains the parent of the context node, if there is one/.
